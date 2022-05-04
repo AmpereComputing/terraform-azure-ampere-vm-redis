@@ -1,8 +1,8 @@
 
 
 locals {
-    redis_server = oci_core_instance.ampere_a1.0.public_ip
-    redis_client = oci_core_instance.ampere_a1.1.public_ip
+    redis_server = azurerm_public_ip.pip.0.ip_address
+    redis_client = azurerm_public_ip.pip.1.ip_address
     copies       = var.run_redis_copies
 }
 
@@ -15,7 +15,7 @@ resource "null_resource" "run_redis_file" {
     type        = "ssh"
     host        = element(azurerm_public_ip.pip.*.ip_address, count.index)
     user        = "ubuntu"
-    private_key = tls_private_key.oci.private_key_pem
+    private_key = tls_private_key.azure.private_key_pem
   }
 
   provisioner "file" {
@@ -39,7 +39,7 @@ resource "null_resource" "redis_server" {
     type        = "ssh"
     host        = element(azurerm_public_ip.pip.*.ip_address, 0)
     user        = "ubuntu"
-    private_key = tls_private_key.oci.private_key_pem
+    private_key = tls_private_key.azure.private_key_pem
   }
 
   provisioner "remote-exec" {

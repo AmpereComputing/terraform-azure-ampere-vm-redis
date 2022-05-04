@@ -102,3 +102,8 @@ variable tenant_id {}
 variable ssh_key_path {
   default = "/home/ubuntu/.ssh"
 }
+variable "run_redis_copies" {
+    default = "1"
+    description = "Value for copies which is used when running run-redis.sh"
+    type    = string
+}
