@@ -75,7 +75,7 @@ resource "null_resource" "redis_client" {
 
   provisioner "remote-exec" {
     inline = [
-      "/opt/run-redis.sh --load --server ${oci_core_instance.ampere_a1.0.private_ip} --copies ${var.run_redis_copies} --threads 1 --clients 4 --pipeline 32 --numruns 3"
+      "/opt/run-redis.sh --load --server ${azure_virtual_machine.vm.0.private_ip_address} --copies ${var.run_redis_copies} --threads 1 --clients 4 --pipeline 32 --numruns 3"
 
     ]
   }
