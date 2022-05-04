@@ -1,9 +1,11 @@
 
 
 locals {
-    redis_server = azurerm_public_ip.pip.0.ip_address
-    redis_client = azurerm_public_ip.pip.1.ip_address
-    copies       = var.run_redis_copies
+    redis_server           = azurerm_public_ip.pip.0.ip_address
+    redis_server_privateip = azurerm_network_interface.nic.0.private_ip_address
+
+    redis_client           = azurerm_public_ip.pip.1.ip_address
+    copies                 = var.run_redis_copies
 }
 
 resource "null_resource" "run_redis_file" {
@@ -64,7 +66,7 @@ resource "null_resource" "redis_client" {
     type        = "ssh"
     host        = element(azurerm_public_ip.pip.*.ip_address, 1)
     user        = "ubuntu"
-    private_key = tls_private_key.oci.private_key_pem
+    private_key = tls_private_key.azure.private_key_pem
   }
 
   provisioner "remote-exec" {
@@ -75,7 +77,8 @@ resource "null_resource" "redis_client" {
 
   provisioner "remote-exec" {
     inline = [
-      "/opt/run-redis.sh --load --server ${azure_virtual_machine.vm.0.private_ip_address} --copies ${var.run_redis_copies} --threads 1 --clients 4 --pipeline 32 --numruns 3"
+    # "/opt/run-redis.sh --load --server ${azurerm_virtual_machine.vm.0.private_ip_address} --copies ${var.run_redis_copies} --threads 1 --clients 4 --pipeline 32 --numruns 3"
+      "/opt/run-redis.sh --load --server ${local.redis_server_privateip} --copies ${var.run_redis_copies} --threads 1 --clients 4 --pipeline 32 --numruns 3"
 
     ]
   }
