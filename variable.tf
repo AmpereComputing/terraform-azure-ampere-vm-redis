@@ -56,7 +56,10 @@ variable "subnet_prefix" {
 
 variable "vm_size" {
   description = "Specifies the size of the virtual machine."
-  default     = "Dpsv5"
+   default     = "Standard_D16ps_v5"
+#  default     = "Standard_D8ps_v5"
+#  default     = "Standard_D4ps_v5"
+#  default     = "Standard_D2ps_v5"
 }
 
 variable "image_publisher" {
