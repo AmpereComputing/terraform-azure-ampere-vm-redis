@@ -36,7 +36,7 @@ variable "osdisk" {
 
 variable "location" {
   description = "The location/region where the virtual network is created. Changing this forces a new resource to be created."
-  default     = "eastus"
+  default     = "westus2"
 }
 
 variable "virtual_network_name" {
@@ -75,6 +75,7 @@ variable "image_offer" {
 variable "image_sku" {
   description = "image sku to apply (az vm image list)"
   default     = "20.04-LTS"
+# NOTE: THIS IS NEEDED Ubuntu Server 20.04 LTS ARM64 Preview
 }
 
 variable "image_version" {
