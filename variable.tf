@@ -6,9 +6,14 @@ variable "azure_vm_count" {
   default = 2
 }
 
+variable "instance_prefix" {
+  description = "Name prefix for vm instances"
+  default = "azure-ampere-vm"
+}
+
 variable "resource_group" {
   description = "The name of the resource group in which to create the virtual network."
-  default     = "Ampere"
+  default     = "Terraform-Ampere-on-Azure"
 }
 
 variable "rg_prefix" {
@@ -16,14 +21,14 @@ variable "rg_prefix" {
   default     = "rg"
 }
 
-variable "hostname" {
-  description = "VM name referenced also in storage-related names."
-
-  default = {
-    "0" = "az01"
-    "1" = "az02"
-  }
-}
+#variable "hostname" {
+#  description = "VM name referenced also in storage-related names."
+#
+#  default = {
+#    "0" = "az01"
+#    "1" = "az02"
+#  }
+#}
 
 variable "osdisk" {
   description = "VM name referenced also in storage-related names."
@@ -56,26 +61,23 @@ variable "subnet_prefix" {
 
 variable "vm_size" {
   description = "Specifies the size of the virtual machine."
-   default     = "Standard_D16ps_v5"
-#  default     = "Standard_D8ps_v5"
-#  default     = "Standard_D4ps_v5"
-#  default     = "Standard_D2ps_v5"
+  default     = "Standard_D16ps_v5"
+# default     = "Basic_A0"
 }
 
 variable "image_publisher" {
   description = "name of the publisher of the image (az vm image list)"
-  default     = "Canonical"
+  default     = "canonical"
 }
 
 variable "image_offer" {
   description = "the name of the offer (az vm image list)"
-  default     = "UbuntuServer"
+  default     = "0001-com-ubuntu-server-arm-preview-focal"
 }
 
 variable "image_sku" {
   description = "image sku to apply (az vm image list)"
-  default     = "20.04-LTS"
-# NOTE: THIS IS NEEDED Ubuntu Server 20.04 LTS ARM64 Preview
+  default     = "20_04-LTS"
 }
 
 variable "image_version" {
@@ -101,10 +103,8 @@ variable "tags" {
 }
 variable subscription_id {}
 variable tenant_id {}
-#variable client_id {}
-#variable client_secret {}
 variable ssh_key_path {
-  default = "/home/ubuntu/.ssh"
+  default = "/home/ubuntu/.ssh/authorized_keys"
 }
 variable "run_redis_copies" {
     default = "1"

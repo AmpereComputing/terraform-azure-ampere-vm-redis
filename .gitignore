@@ -5,6 +5,10 @@
 *.tfstate
 *.tfstate.*
 
+# ssh keys
+*-id_rsa
+*-id_rsa.pub
+
 # Crash log files
 crash.log
 
@@ -33,3 +37,7 @@ terraform.tfvars
 
 # Include tfplan files to ignore the plan output of command: terraform plan -out=tfplan
 # example: *tfplan*
+#asciinema
+.config
+
+assets/*.mp4

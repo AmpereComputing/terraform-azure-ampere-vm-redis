@@ -1,21 +1,20 @@
 
 
 locals {
-    redis_server           = azurerm_public_ip.pip.0.ip_address
+    redis_server           = data.azurerm_public_ip.pip.0.ip_address
     redis_server_privateip = azurerm_network_interface.nic.0.private_ip_address
-
-    redis_client           = azurerm_public_ip.pip.1.ip_address
+    redis_client           = data.azurerm_public_ip.pip.1.ip_address
     copies                 = var.run_redis_copies
 }
 
 resource "null_resource" "run_redis_file" {
   count    = var.azure_vm_count
   triggers = {
-    instance_public_ip = element(azurerm_public_ip.pip.*.ip_address, count.index)
+    instance_public_ip = element(data.azurerm_public_ip.pip.*.ip_address, count.index)
   }
   connection {
     type        = "ssh"
-    host        = element(azurerm_public_ip.pip.*.ip_address, count.index)
+    host        = element(data.azurerm_public_ip.pip.*.ip_address, count.index)
     user        = "ubuntu"
     private_key = tls_private_key.azure.private_key_pem
   }
@@ -34,12 +33,12 @@ resource "null_resource" "run_redis_file" {
 }
 resource "null_resource" "redis_server" {
   triggers = {
-    instance_public_ip = element(azurerm_public_ip.pip.*.ip_address, 0)
+    instance_public_ip = element(data.azurerm_public_ip.pip.*.ip_address, 0)
   }
   depends_on = [ null_resource.run_redis_file ]
   connection {
     type        = "ssh"
-    host        = element(azurerm_public_ip.pip.*.ip_address, 0)
+    host        = element(data.azurerm_public_ip.pip.*.ip_address, 0)
     user        = "ubuntu"
     private_key = tls_private_key.azure.private_key_pem
   }
@@ -59,12 +58,12 @@ resource "null_resource" "redis_server" {
 
 resource "null_resource" "redis_client" {
   triggers = {
-    instance_public_ip = element(azurerm_public_ip.pip.*.ip_address, 1)
+    instance_public_ip = element(data.azurerm_public_ip.pip.*.ip_address, 1)
   }
   depends_on = [ null_resource.run_redis_file, null_resource.redis_server ]
   connection {
     type        = "ssh"
-    host        = element(azurerm_public_ip.pip.*.ip_address, 1)
+    host        = element(data.azurerm_public_ip.pip.*.ip_address, 1)
     user        = "ubuntu"
     private_key = tls_private_key.azure.private_key_pem
   }
